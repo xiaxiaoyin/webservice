@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:jawxs="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <!--<import resource="classpath:META-INF/cxf/cxf.xml" />-->
+    <!--<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />-->
+    <!--<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />-->
+    <context:component-scan base-package="y.com"></context:component-scan> <!-- 配置视图解析器 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    <!--提供json支持-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="peopelmanagerimpl" class="y.com.cxf.PeopelManagerImpl"/>
+    <jawxs:server address="/" serviceClass="y.com.cxf.PeopelManager">
+        <jawxs:serviceBean>
+            <ref bean="peopelmanagerimpl"/>
+        </jawxs:serviceBean>
+    </jawxs:server>
+
+</beans>
